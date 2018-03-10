@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.ssm.dao.DeptDao">
+	<select id="findAll" resultType="com.neusoft.ssm.bean.Dept">
+		select * from dept
+	</select>
+	<!-- <select id="findByDept" parameterType="Integer" resultMap="deptresult">
+		select * from emp e, dept d
+		where e.deptno = d.deptno
+			and d.deptno = #{deptno}
+	</select>
+	<resultMap id="deptresult" type="Dept">
+		<id column="deptno" property="deptno"/>
+		<result column="dname" property="dname"/>
+		<result column="loc" property="loc"/>
+		<collection property="emplist" ofType="Emp">
+			<id column="empno" property="empno"/>
+			<result column="sal" property="sal" />
+			<result column="mgr" property="mgr" />
+			<result column="hiredate" property="hiredate" />
+			<result column="comm" property="comm" />
+			<result column="job" property="job" />
+			<result column="ename" property="ename" />
+		</collection>
+	</resultMap>-->
+	<insert id="dadd" parameterType="com.neusoft.ssm.bean.Dept">
+		insert into dept values
+			(	#{deptno},
+			#{dname}, 
+			#{loc} 
+			)
+	</insert>
+	<select id="findByDno" parameterType="Integer" resultType="com.neusoft.ssm.bean.Dept">
+		select * from dept
+		where deptno = #{id}
+	</select>
+	<update id="dupdate" parameterType="com.neusoft.ssm.bean.Dept">
+		update dept 
+		<set>
+			<if test="dname !=null and dname !=''">
+				dname=#{dname},
+			</if>
+			<if test="loc !=null and loc !=''">
+				loc = #{loc},
+			</if>
+			
+		</set>
+		where deptno = #{deptno}
+	</update>
+		<delete id="ddelete" parameterType="Integer">
+		delete dept where deptno = #{id}
+	</delete>
+</mapper>

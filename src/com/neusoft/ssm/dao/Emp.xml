@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neusoft.ssm.dao.EmpDao">
+	<select id="findAllJob" resultType="String">
+		select distinct job from emp
+	</select>
+	<select id="findAll" resultType="com.neusoft.ssm.bean.Emp">
+		select * from emp
+	</select>
+	<select id="findById" parameterType="Integer" resultType="com.neusoft.ssm.bean.Emp">
+		select * from emp
+		where empno = #{id}
+	</select>
+	<insert id="add" parameterType="com.neusoft.ssm.bean.Emp">
+		insert into emp values
+			(SEQ_EMP_EMPNO.nextval,
+			#{ename}, 
+			#{job}, 
+			#{mgr}, 
+			#{hiredate},
+			#{sal},
+			#{comm},
+			#{deptno})
+	</insert>
+	<update id="update" parameterType="com.neusoft.ssm.bean.Emp">
+		update emp 
+		<set>
+			<if test="ename !=null and ename !=''">
+				ename=#{ename},
+			</if>
+			<if test="job !=null and job !=''">
+				job = #{job},
+			</if>
+			<if test="mgr !=null and mgr != 0">
+				mgr = #{mgr},
+			</if>
+			<if test="hiredate !=null">
+				hiredate = #{hiredate},
+			</if>
+			<if test="sal !=null and sal != 0">
+				sal = #{sal},
+			</if>
+			<if test="comm !=null and comm != 0">
+				comm = #{comm},
+			</if>
+			<if test="deptno !=null and deptno != 0">
+				deptno = #{deptno}
+			</if>
+		</set>
+		where empno = #{empno}
+	</update>
+	<delete id="deleteById" parameterType="Integer">
+		delete emp where empno = #{id}
+	</delete>
+	<select id="findAllEmp" resultMap="empresult">
+		select * from emp e, dept d
+		where e.deptno = d.deptno
+	</select>
+	<select id="findAllDept" resultMap="deptresult">
+		select * from emp e, dept d
+		where e.deptno = d.deptno
+	</select>
+	<resultMap type="com.neusoft.ssm.bean.Emp" id="empresult">
+		<id column="empno" property="empno"/>
+		<result column="sal" property="sal" />
+		<result column="mgr" property="mgr" />
+		<result column="hiredate" property="hiredate" />
+		<result column="comm" property="comm" />
+		<result column="job" property="job" />
+		<result column="ename" property="ename" />
+		<association property="dept" javaType="com.neusoft.ssm.bean.Dept">
+			<id column="deptno" property="deptno"/>
+			<result column="dname" property="dname"/>
+			<result column="loc" property="loc"/>
+		</association>
+	</resultMap>
+	<select id="findByDept" parameterType="Integer" resultMap="deptresult">
+		select * from emp e, dept d
+		where e.deptno = d.deptno
+			and d.deptno = #{deptno}
+	</select>
+	<resultMap id="deptresult" type="com.neusoft.ssm.bean.Dept">
+		<id column="deptno" property="deptno"/>
+		<result column="dname" property="dname"/>
+		<result column="loc" property="loc"/>
+		<collection property="emplist" ofType="com.neusoft.ssm.bean.Emp">
+			<id column="empno" property="empno"/>
+			<result column="sal" property="sal" />
+			<result column="mgr" property="mgr" />
+			<result column="hiredate" property="hiredate" />
+			<result column="comm" property="comm" />
+			<result column="job" property="job" />
+			<result column="ename" property="ename" />
+		</collection>
+	</resultMap>
+</mapper>
